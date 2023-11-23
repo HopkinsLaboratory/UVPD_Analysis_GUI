@@ -2,6 +2,24 @@
 
 This repository provides a Graphical User Interface (GUI) along with sample files for the analysis of variable wavelength UVPD (Ultraviolet Photodissociation) data obtained on the modified QTRAP 5500 hybrid triple-quad in the Hopkins Lab.
 
+## Prerequisites 
+
+This GUI requires the following Python packages: PyQt5, pyteomics, numpy, pandas, and lxml. The can be installed by opening the command prompt and entering the following command: 
+
+pip install numpy lxml pandas PyQt5 pyteomics 
+
+Additionally, the GUI requires Proteowizard's msconvert package. Proteowizard can be downloaded from https://proteowizard.sourceforge.io/download.html. After downloading, install the latest version to the default directory.
+
+Once installed, add the following locations to your system's PATH, as they contain the necessary executables:
+
+C:\Program Files (x86)\ProteoWizard\ProteoWizard 3.0.11392
+
+C:\Program Files (x86)\ProteoWizard\ProteoWizard 3.0.11392\FileInfoToXml
+
+(Note: The version number in the paths might vary slightly.)
+
+These directories contain the essential msconvert.exe and fileinfotoxml.exe files. After completing these steps, you can proceed with the setup and utilization of the GUI.
+
 ## Getting Started
 
 To launch the GUI, run `UVPD_GUI.py` located in the `GUI` directory in your preferred Python environment. Ensure that the following packages are installed: PyQt5, numpy, pandas, and pyteomics. If any of these packages are missing, you will be prompted to install them upon launching the GUI.
