@@ -169,6 +169,7 @@ def extract_RawData(mzml_directory, parent_mz, output_csv_file, update_output=No
         #get wavelength from mzml file name
         try:
             wavelength = re.findall(r'\d+', mzml_file.split('Laser')[-1])[-1]
+            wl_title = f'{wavelength}nm' #title to be written to raw data file
         except ValueError as ve:
             update_output(f'Could not extract the wavelength from the .mzml file name. This is what the code has found: {wavelength}.\nDoes the filename contain the text: "Laser"?\n')
             update_output(f'Error: {ve}\nTraceback: {traceback.format_exc()}\n')       
@@ -232,7 +233,7 @@ def extract_RawData(mzml_directory, parent_mz, output_csv_file, update_output=No
 
         # Step 16: Calculate the averaged spectrum across each scan for this mzML file
         averaged_spectrum = np.mean(interpolated_intensity_values, axis=0)
-        data_dict[wavelength] = averaged_spectrum
+        data_dict[wl_title] = averaged_spectrum
     
     # Step 17: Create a DataFrame with the common m/z grid as the first column
     df = pd.DataFrame(data_dict)
