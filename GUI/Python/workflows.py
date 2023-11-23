@@ -21,17 +21,23 @@ def convert_wiff_to_mzml(wiff_file, directory, mzml_directory, update_output=Non
     # Redirect print outputs to the GUI output window
     sys.stdout = TextRedirect(textWritten=update_output)
 
+    scan_file = f'{os.path.join(directory, wiff_file)}.scan'
+
+    if not os.path.exists(scan_file):
+        print(f'The corresponding .scan file is missing from the directory. Please add the following file to the directory, and re-run the code:\n{wiff_file}.scan\n\n')
+        raise FileNotFoundError(f'The corresponding .scan file is missing from the directory. Please add the following file to the directory, and re-run the code:\n{wiff_file}.scan\n\n')
+
     mzml_file = f'{os.path.splitext(wiff_file)[0]}.mzml'
-    
+
     try:
-        subprocess.run(['msconvert', os.path.join(directory, wiff_file), '-o', mzml_directory, '--mzML', '--64'])
+        subprocess.run(['msconvert', os.path.join(directory, wiff_file), '-o', mzml_directory, '--mzML', '--64'], capture_output=True, text=True)
         return mzml_file
-    
+
     except FileNotFoundError:
         update_output(f'Error: msconvert command not found. Please make sure it is installed and in your system PATH.\n')
         QApplication.processEvents()  # Allow the GUI to update
         raise FileNotFoundError("msconvert (Part of proteowizard) could not be found. Did you add the required directories to your system's PATH?.")
-        
+    
     except subprocess.CalledProcessError as cpe:
         update_output(f'Subprocess error converting {wiff_file} to mzML: {cpe}\nTraceback: {traceback.format_exc()}\n')
         QApplication.processEvents()  # Allow the GUI to update        
@@ -40,7 +46,7 @@ def convert_wiff_to_mzml(wiff_file, directory, mzml_directory, update_output=Non
     except Exception as e:
         update_output(f'Unexpected error converting {wiff_file} to mzML: {e}\nTraceback: {traceback.format_exc()}\n')
         QApplication.processEvents()  # Allow the GUI to update        
-        raise Exception('Unexpected error during .wiff file conversion.')
+        raise Exception(f'Unexpected error converting {wiff_file} to mzML: {e}\nTraceback: {traceback.format_exc()}\n')
     
 # Function to integrate mass spectra within specified bounds using NumPy
 def integrate_spectra(directory, mzml_file, integration_bounds, parent_mz, update_output=None):
