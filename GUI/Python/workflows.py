@@ -27,6 +27,11 @@ def convert_wiff_to_mzml(wiff_file, directory, mzml_directory, update_output=Non
         subprocess.run(['msconvert', os.path.join(directory, wiff_file), '-o', mzml_directory, '--mzML', '--64'])
         return mzml_file
     
+    except FileNotFoundError:
+        update_output(f'Error: msconvert command not found. Please make sure it is installed and in your system PATH.\n')
+        QApplication.processEvents()  # Allow the GUI to update
+        raise FileNotFoundError("msconvert (Part of proteowizard) could not be found. Did you add the required directories to your system's PATH?.")
+        
     except subprocess.CalledProcessError as cpe:
         update_output(f'Subprocess error converting {wiff_file} to mzML: {cpe}\nTraceback: {traceback.format_exc()}\n')
         QApplication.processEvents()  # Allow the GUI to update        
