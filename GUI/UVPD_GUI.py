@@ -1,12 +1,10 @@
-import sys, os, time, importlib, traceback
-import numpy as np
-from Python.workflows import convert_wiff_to_mzml, extract_RawData
-from Python.main import main
-from datetime import datetime
+import sys, os, time, importlib, traceback, subprocess
+from io import StringIO
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QCheckBox, QTextEdit, QFileDialog, QTextEdit, QMessageBox
 from PyQt5.QtGui import QTextCursor
 from PyQt5 import QtWidgets
-from io import StringIO
+import numpy as np
+from datetime import datetime
 
 # Define a class that overwrite the printing option from terminal to a window within the GUI
 class TextRedirect(StringIO):
@@ -39,7 +37,7 @@ class GUI(QWidget):
         # Directory
         self.directory_label = QLabel('Directory that contains .wiff files or the mzml directory:')
         self.directory_line_edit = QLineEdit()
-        self.directory_line_edit.setPlaceholderText('Example: D:\SampleData\CV_21')
+        self.directory_line_edit.setPlaceholderText(r'Example: D:\SampleData\CV_21')
         self.directory_button = QPushButton('Select Directory')
         self.directory_button.clicked.connect(self.browse_directory)
 
@@ -65,7 +63,7 @@ class GUI(QWidget):
         # Power Data File Name
         self.power_data_label = QLabel('Power Data .csv file (Directory and/or Filename):')
         self.power_data_line_edit = QLineEdit()
-        self.power_data_line_edit.setPlaceholderText('Example: D:\SampleData\power_400_600_100us.csv')
+        self.power_data_line_edit.setPlaceholderText(r'Example: D:\SampleData\power_400_600_100us.csv')
 
         # Output Text
         self.output_label = QLabel('Output:')
@@ -330,7 +328,7 @@ class GUI(QWidget):
                     QApplication.processEvents()  # Allow the GUI to update
                 
                 except Exception as e:
-                    print(f'There was a problem extracting {wiff_file}. Please see the error below:\n{e}\n') #I don't really know how this can break, so we're using a broad exception. Surprise me, users!
+                    #print(f'There was a problem extracting {wiff_file}. Please see the error below:\n{e}\n') #I don't really know how this can break, so we're using a broad exception. Surprise me, users!
                     print(f'{e}\n')
                     QApplication.processEvents()  # Allow the GUI to update
                     return
@@ -383,7 +381,15 @@ class GUI(QWidget):
 
 #The bit that actually starts the GUI
 if __name__ == '__main__': #always and forever. 
-    
+
+    #check if msconvert is available in the systems PATH
+    def check_msconvert():
+        try:
+            subprocess.run(['msconvert'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+            return True
+        except subprocess.CalledProcessError:
+            return False       
+        
     #Check for required python libraries before the GUI initializes
     def check_and_install_packages(package_list):
         missing_packages = [] #empty list to append missing packages to (if found)
@@ -395,8 +401,20 @@ if __name__ == '__main__': #always and forever.
                 missing_packages.append(package)
 
         return missing_packages
+    
+    #Check for prerequisite python file containing necessary analysis functions 
+    # Function to check if specific functions are available in a Python file
+    def check_python_functions(module_name, *function_names):
+        try:
+            module = importlib.import_module(module_name)
+            for func_name in function_names:
+                if not hasattr(module, func_name):
+                    return False
+            return True
+        except (ModuleNotFoundError, ImportError):
+            return False
 
-    required_packages = ['pyqt5', 'pyteomics', 'numpy', 'pandas'] #modules required for the UVPD script
+    required_packages = ['PyQt5', 'pyteomics', 'numpy', 'pandas', 'lxml'] #modules required for the UVPD script
     missing_packages = check_and_install_packages(required_packages) 
 
     if missing_packages:
@@ -406,14 +424,28 @@ if __name__ == '__main__': #always and forever.
         if answer.lower() == 'y':
             try:
                 os.system(f"pip install {' '.join(missing_packages)}")
+                print('Packages installed successfully. Please close the python interface and relaunch the GUI.')
+                sys.exit(0)
            
             except Exception as e:
                 print(f'An exception has occured when trying to install {" ".join(missing_packages)}: {e}.\nTraceback: {traceback.format_exc()}\nPlease try to install the following packages via the command prompt: {" ".join(missing_packages)}')
+                sys.exit(1)
 
-            print("Packages installed successfully.")
-            sys.exit()
+    # Check if msconvert is available
+    if not check_msconvert():
+        print('The msconvert executable is not available on your machine. Please install ProteoWizard and/or make sure the directory that contains msconvert it is in your system PATH. Please see the readme on the main GitHub page.')
+        sys.exit(1)
 
-    #start the GUI
+    #check if functions that do the legwork are where they should be. These are the locations if downloaded/cloned from Github. 
+    try: 
+        from Python.workflows import convert_wiff_to_mzml, extract_RawData
+        from Python.main import main
+
+    except (ModuleNotFoundError, ImportError):
+        print('The required files located within the /Python directory cannot be found. Please redownload/reclone the code from GitHub and do not remove any files - only execute the code from the UVPD_GUI.py.')
+        sys.exit(1)
+        
+    #start the GUI if all the error handing checks are passed
     app = QApplication(sys.argv)
     gui = GUI()
     sys.exit(app.exec_())
