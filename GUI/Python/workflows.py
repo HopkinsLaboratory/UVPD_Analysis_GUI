@@ -22,18 +22,19 @@ def convert_wiff_to_mzml(wiff_file, directory, mzml_directory, update_output=Non
     sys.stdout = TextRedirect(textWritten=update_output)
 
     #check if required files are present
-    scan_file = f'{os.path.join(directory, wiff_file)}.scan'
+    wiff_file_check = os.path.join(directory, wiff_file)
+    scan_file_check = f'{os.path.join(directory, wiff_file)}.scan'
 
-    if not os.path.exists(wiff_file):
-        raise FileNotFoundError(f'The corresponding .wiff file is missing from the directory. Please add the following file to the directory, and re-run the code:\n{wiff_file}\n\n')
+    if not os.path.exists(wiff_file_check):
+        raise FileNotFoundError(f'The corresponding .wiff file is missing from the directory. Please add the following file to the directory, and re-run the code:\n{os.path.basename(wiff_file_check)}\n\n')
     
-    if not os.path.exists(scan_file):
-        raise FileNotFoundError(f'The corresponding .scan file is missing from the directory. Please add the following file to the directory, and re-run the code:\n{wiff_file}.scan\n\n')
+    if not os.path.exists(scan_file_check):
+        raise FileNotFoundError(f'The corresponding .scan file is missing from the directory. Please add the following file to the directory, and re-run the code:\n{os.path.basename(scan_file_check)}\n\n')
 
     mzml_file = f'{os.path.splitext(wiff_file)[0]}.mzml'
 
     try:
-        subprocess.run(['msconvert', os.path.join(directory, wiff_file), '-o', mzml_directory, '--mzML', '--64'], capture_output=True, text=True)
+        subprocess.run(['msconvert', os.path.join(directory, wiff_file), '-o', mzml_directory, '--mzML', '--64'])
         return mzml_file
 
     except FileNotFoundError:
@@ -173,6 +174,7 @@ def extract_RawData(mzml_directory, parent_mz, output_csv_file, update_output=No
         try:
             wavelength = re.findall(r'\d+', mzml_file.split('Laser')[-1])[-1]
             wl_title = f'{wavelength}nm' #title to be written to raw data file
+
         except ValueError as ve:
             update_output(f'Could not extract the wavelength from the .mzml file name. This is what the code has found: {wavelength}.\nDoes the filename contain the text: "Laser"?\n')
             update_output(f'Error: {ve}\nTraceback: {traceback.format_exc()}\n')       
