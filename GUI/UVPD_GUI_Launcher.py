@@ -1,9 +1,15 @@
-import sys, os, time, importlib, traceback, subprocess
 from io import StringIO
 from datetime import datetime
-import platform
-from pathlib import Path
 
+import importlib
+from pathlib import Path
+import platform
+import os
+import sys
+import shutil 
+import subprocess
+import stat
+import time
 
 # Before the GUI launches, check that the user has the required packages to run the MobCal-MPI GUI
 #The most troublesome package is Git, which also requires GitHub desktop to be on the user's machine. First, we check if it is installed.
