@@ -1,7 +1,7 @@
 import os, re, time, sys, traceback
 import numpy as np
 from Python.workflows import integrate_spectra, PE_calc, PE_calc_noNorm
-from PyQt5.QtWidgets import QApplication
+from PyQt6.QtWidgets import QApplication
 from io import StringIO
 
 class TextRedirect(StringIO):

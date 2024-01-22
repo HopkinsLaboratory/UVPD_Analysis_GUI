@@ -330,7 +330,7 @@ class GUI(QWidget):
     #Function to update text being printed to the GUI's output window
     def update_output(self, text):
         cursor = self.output_text_edit.textCursor()
-        cursor.movePosition(QTextCursor.End)
+        cursor.movePosition(QTextCursor.MoveOperation.End)
         cursor.insertText(text)
         self.output_text_edit.setTextCursor(cursor)
         self.output_text_edit.ensureCursorVisible()
@@ -639,8 +639,8 @@ class GUI(QWidget):
     def close_application(self): # Exit alert for the user
         choice_title = 'Exit Confirmation'
         choice_prompt = 'Are you sure you wish to exit?'
-        choice = QtWidgets.QMessageBox.question(self, choice_title, choice_prompt, QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if choice == QtWidgets.QMessageBox.Yes:
+        choice = QtWidgets.QMessageBox.question(self, choice_title, choice_prompt, QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        if choice == QMessageBox.StandardButton.Yes:
            
             #close application
             sys.exit(0)

@@ -2,7 +2,7 @@ import os, re, sys, traceback, subprocess
 import numpy as np
 import pyteomics.mzml as mzml
 import pandas as pd
-from PyQt5.QtWidgets import QApplication
+from PyQt6.QtWidgets import QApplication
 from io import StringIO
 
 class TextRedirect(StringIO):
