@@ -621,6 +621,7 @@ class GUI(QWidget):
                 print('The UVPD Analysis GUI is being updated. Any errors encountered during the update process will be printed below.')
                 
                 #Run the update function
+                from Python.Update import Update_GUI_files
                 Update_GUI_files(repo_url, root, ID_file, repo_SHA, delete_dir)
 
                 print('The UVPD Analysis GUI files have been succesfully updated to their current version. The GUI will now close. Please reload the GUI')
