@@ -8,7 +8,7 @@ Before using the UVPD Analysis GUI, ensure that the following software and packa
 
 ### Required Software
 - **GitHub Desktop**: Download from [GitHub Desktop](https://desktop.github.com/). A GitHub account is not required for installation.
-- **Git**: Download from [Git SCM](https://git-scm.com/). Please install in the default location and add it to PATH if necessary.
+- **Git**: Download from [Git SCM](https://git-scm.com/). Please install in the default location and add it to PATH if necessary. A GitHub account is not required for installation.
 - **Python 3.12+**: Download and install from [Python Downloads](https://www.python.org/downloads/).
 -**Proteowizard's msconvert package**: Download and install the latest version from [Proteowizard Downloads](https://proteowizard.sourceforge.io/download.html). Install in the default directory.
 
