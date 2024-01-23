@@ -1,28 +1,45 @@
 # UVPD Analysis GUI
 
-This repository provides a Graphical User Interface (GUI) along with sample files for the analysis of variable wavelength UVPD (Ultraviolet Photodissociation) data obtained on the modified QTRAP 5500 hybrid triple-quad in the Hopkins Lab.
+## Introduction
+This repository contains a Graphical User Interface (GUI) designed for the analysis of variable wavelength Ultraviolet Photodissociation (UVPD) data. It's specifically tailored for data obtained on the modified QTRAP 5500 hybrid triple-quad in the Hopkins Lab.
 
-## Prerequisites 
+## Prerequisites
+Before using the UVPD Analysis GUI, ensure that the following software and packages are installed on your local machine:
 
-This GUI requires the following Python packages: PyQt5, pyteomics, numpy, pandas, and lxml. The can be installed by opening the command prompt and entering the following command: 
+### Required Software
+- **GitHub Desktop**: Download from [GitHub Desktop](https://desktop.github.com/). A GitHub account is not required for installation.
+- **Git**: Download from [Git SCM](https://git-scm.com/). Please install in the default location and add it to PATH if necessary.
+- **Python 3.12+**: Download and install from [Python Downloads](https://www.python.org/downloads/).
+-**Proteowizard's msconvert package**: Download and install the latest version from [Proteowizard Downloads](https://proteowizard.sourceforge.io/download.html). Install in the default directory.
 
-pip install numpy lxml pandas PyQt5 pyteomics 
+### Required Python Packages
+The GUI depends on several Python packages. Install them using the following command in your command prompt:
 
-Additionally, the GUI requires Proteowizard's msconvert package. Proteowizard can be downloaded from https://proteowizard.sourceforge.io/download.html. After downloading, install the latest version to the default directory.
+```console
+pip install numpy lxml pandas PyQt6 pyteomics gitpython
+```
 
-Once installed, add the following locations to your system's PATH, as they contain the necessary executables:
+### PATH Configuration
 
+After installation, add the following directories to your system's PATH. These contain the necessary executables `msconvert.exe` and `fileinfotoxml.exe`:
+
+```text
 C:\Program Files (x86)\ProteoWizard\ProteoWizard 3.0.11392
-
 C:\Program Files (x86)\ProteoWizard\ProteoWizard 3.0.11392\FileInfoToXml
+```
+*Note: The version number in the paths might vary slightly.*
 
-(Note: The version number in the paths might vary slightly.)
+### Setup and Usage
 
-These directories contain the essential msconvert.exe and fileinfotoxml.exe files. After completing these steps, you can proceed with the setup and utilization of the GUI.
+After completing the installation and configuration steps, you can proceed with setting up and using the UVPD Analysis GUI.
 
 ## Getting Started
 
-To launch the GUI, run `UVPD_GUI.py` located in the `GUI` directory in your preferred Python environment. Ensure that the following packages are installed: PyQt5, numpy, pandas, and pyteomics. If any of these packages are missing, you will be prompted to install them upon launching the GUI.
+To launch the GUI, run `UVPD_GUI.py` located in the `GUI` directory in your preferred Python environment. Ensure that the following packages are installed: `GitHub Desktop`, `Git`, and `msconvert`.
+
+Also ensure that the following python packages are installed: `numpy`, `lxml`, `pandas`, `PyQt6`, `pyteomics`, and `gitpython`. 
+
+If any of these packages are missing, you will be prompted to install them upon launching the GUI.
 
 ## GUI Initialization
 
